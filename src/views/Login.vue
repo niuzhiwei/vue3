@@ -1,0 +1,60 @@
+<template>
+  <div class="container">
+    <validate-form @form-submit='onFormSubmit'>
+      <div class="mb-3">
+        <label class="form-label">邮箱地址</label>
+        <validate-input
+          v-model="emailVal"
+          :rules="emailRules"
+          placeholder='请输入邮箱地址'
+          type='text'
+        ></validate-input>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">密码</label>
+        <validate-input
+          v-model="passwordVal"
+          :rules="passwordRules"
+          placeholder='请输入密码'
+          type='password'
+        ></validate-input>
+      </div>
+      <template #submit>
+        <span class="btn btn-danger">Submit</span>
+      </template>
+    </validate-form>
+  </div>
+</template>
+
+<script lang='ts'>
+import { defineComponent, ref } from 'vue'
+import ValidateForm from '../components/ValidateForm.vue'
+import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
+export default defineComponent({
+  name: 'Login',
+  components: { ValidateInput, ValidateForm },
+  setup () {
+    const emailVal = ref('123@163.com')
+    const passwordVal = ref('123')
+    const emailRules: RulesProp = [
+      { type: 'required', message: '电子邮箱地址不能为空' },
+      { type: 'email', message: '请输入正确的电子邮箱格式' }
+    ]
+    const passwordRules: RulesProp = [
+      { type: 'required', message: '密码不能为空' }
+    ]
+    const onFormSubmit = (result: boolean) => {
+      console.log(result)
+    }
+    return {
+      emailRules,
+      passwordRules,
+      emailVal,
+      passwordVal,
+      onFormSubmit
+    }
+  }
+})
+</script>
+<style  scoped>
+</style>

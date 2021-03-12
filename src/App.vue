@@ -17,34 +17,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
+import { GlobalDataProps } from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
-
-const currentUser: UserProps = {
-  isLogin: false,
-  name: 'niuniu',
-  id: 1
-}
+import GlobalHeader from './components/GlobalHeader.vue'
 
 export default defineComponent({
   name: 'App',
   components: { GlobalHeader },
   setup () {
+    const store = useStore<GlobalDataProps>()
+    const user = computed(() => store.state.user)
     return {
-      user: currentUser
+      user
     }
   }
 })
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

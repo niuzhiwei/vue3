@@ -28,10 +28,10 @@
       <li class="list-inline-item">
         <dropdown :title="`${user.name}`">
           <dropdown-item>
-            <a
+            <router-link
               class="dropdown-item"
-              href="#"
-            >新建文章</a>
+              to='/create'
+            >新建文章</router-link>
           </dropdown-item>
           <dropdown-item disabled>
             <a
@@ -52,24 +52,24 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType } from "vue";
-import Dropdown from "./Dropdown.vue";
-import DropdownItem from "./DropdownItem.vue";
+import { defineComponent, PropType } from 'vue'
+import Dropdown from './Dropdown.vue'
+import DropdownItem from './DropdownItem.vue'
 export interface UserProps {
   isLogin: boolean;
   name?: string;
   id?: number;
 }
 export default defineComponent({
-  name: "GlobalHeader",
+  name: 'GlobalHeader',
   components: { Dropdown, DropdownItem },
   props: {
     user: {
       type: Object as PropType<UserProps>,
-      required: true,
-    },
-  },
-});
+      required: true
+    }
+  }
+})
 </script>
 <style scoped>
 </style>

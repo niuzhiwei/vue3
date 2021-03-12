@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+ <div class="login-page mx-auto p-3 w-330">
+   <h5 class="my-4 text-center">登录到者也</h5>
     <validate-form @form-submit='onFormSubmit'>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
@@ -28,12 +29,16 @@
 
 <script lang='ts'>
 import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 export default defineComponent({
   name: 'Login',
   components: { ValidateInput, ValidateForm },
   setup () {
+    const router = useRouter()
+    const store = useStore()
     const emailVal = ref('123@163.com')
     const passwordVal = ref('123')
     const emailRules: RulesProp = [
@@ -43,8 +48,12 @@ export default defineComponent({
     const passwordRules: RulesProp = [
       { type: 'required', message: '密码不能为空' }
     ]
+    // 提交表单
     const onFormSubmit = (result: boolean) => {
-      console.log(result)
+      if (result) {
+        store.commit('login')
+        router.push('/')
+      }
     }
     return {
       emailRules,

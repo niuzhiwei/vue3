@@ -20,9 +20,7 @@
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
-    <button
-      class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25"
-    >
+    <button class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25">
       加载更多
     </button>
 
@@ -30,7 +28,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
 import ColumnList from '../components/ColumnList.vue'
@@ -40,6 +38,9 @@ export default defineComponent({
   components: { ColumnList },
   setup () {
     const store = useStore<GlobalDataProps>()
+    onMounted(() => {
+      store.dispatch('fetchColumns')
+    })
     const list = computed(() => store.state.columns)
     return {
       list

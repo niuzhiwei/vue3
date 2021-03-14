@@ -2,7 +2,7 @@
   <div class="post-list">
     <article
       v-for="post in list"
-      :key="post.id"
+      :key="post._id"
       class="card mb-3 shadow-sm"
     >
       <div class="card-body">
@@ -15,12 +15,12 @@
             class="col-4"
           >
             <img
-              :src="post.image"
+              :src="post.image.url && post.image.url"
               :alt="post.title"
               class="rounded-lg w-100"
             >
           </div>
-          <p :class="{'col-8': post.image}">{{post.content}}</p>
+          <p :class="{'col-8': post.image}">{{post.excerpt}}</p>
         </div>
         <span class="text-muted">{{post.createdAt}}</span>
       </div>

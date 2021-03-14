@@ -1,6 +1,7 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
+    <input type="file" name='file' @change.prevent="handleFileChange">
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
@@ -34,6 +35,7 @@
 import { defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import { GlobalDataProps } from '../store'
 import { PostProps } from '../testData'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
@@ -57,26 +59,43 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        const { columnId } = store.state.user
-        if (columnId) {
+        const { column } = store.state.user
+        if (column) {
           const newPost: PostProps = {
-            id: new Date().getTime(),
+            _id: new Date().getTime() + '',
             title: titleVal.value,
             content: contentVal.value,
-            columnId,
+            column,
             createdAt: new Date().toLocaleString()
           }
           store.commit('createPost', newPost)
           router.push({
             name: 'column',
             params: {
-              id: columnId
+              id: column
             }
           })
         }
       }
     }
-    return { titleVal, contentVal, titleRules, contentRules, onFormSubmit }
+    const handleFileChange = (e: Event) => {
+      const target = e.target as HTMLInputElement
+      const files = target.files
+      if (files) {
+        const uploadedFile = files[0]
+        const formData = new FormData()
+        formData.append(uploadedFile.name, uploadedFile)
+        formData.append('icode', 'A0AEFEEC4B540896')
+        axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
+          console.log(res)
+        })
+      }
+    }
+    return { titleVal, contentVal, titleRules, contentRules, onFormSubmit, handleFileChange }
   }
 })
 </script>

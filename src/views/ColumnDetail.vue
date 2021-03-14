@@ -3,14 +3,14 @@
     <div class="colunm-info row mb-4 border-bottom pb-4 align-items-center">
       <div class="col-3 text-center">
         <img
-          :src="column.avatar"
-          :alt="column.title"
-          class="rounded-circle"
+          :src="column &&column.avatar && column.avatar.url"
+          :alt="column && column.title"
+          class="rounded-circle border w-100"
         >
       </div>
       <div class="col-9">
-        <h4>{{column.title}}</h4>
-        <div class="text-muted">{{column.description}}</div>
+        <h4 v-if="column">{{column.title}}</h4>
+        <div class="text-muted">{{column && column.description}}</div>
       </div>
     </div>
     <post-list :list="list"></post-list>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
@@ -27,8 +27,12 @@ export default defineComponent({
   components: { PostList },
   setup () {
     const route = useRoute()
-    const currentId = +route.params.id
+    const currentId = route.params.id
     const store = useStore<GlobalDataProps>()
+    onMounted(() => {
+      store.dispatch('fetchColumn', currentId)
+      store.dispatch('fetchPosts', currentId)
+    })
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsByCid(currentId))
     return {

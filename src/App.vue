@@ -1,6 +1,11 @@
 <template>
   <div class="container">
     <global-header :user='user'></global-header>
+    <loader
+      v-if="isLoading"
+      text='拼命加载中'
+      background="rgba(0,0,0,0.8)"
+    ></loader>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
@@ -17,20 +22,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from './store'
+import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from './components/GlobalHeader.vue'
+import Loader from './components/Loader.vue'
+import createMessage from './components/createMessage'
 
 export default defineComponent({
   name: 'App',
-  components: { GlobalHeader },
+  components: { GlobalHeader, Loader },
   setup () {
     const store = useStore<GlobalDataProps>()
     const user = computed(() => store.state.user)
+    const token = computed(() => store.state.token)
+    const isLoading = computed(() => store.state.loading)
+    const error = computed(() => store.state.error)
+    onMounted(() => {
+      if (!user.value.isLogin && token.value) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token.value}`
+        store.dispatch('fetchCurrentUser')
+      }
+    })
+    watch(
+      () => error.value.status,
+      () => {
+        const { status, message } = error.value
+        if (status && message) {
+          createMessage(message, 'error')
+        }
+      }
+    )
     return {
-      user
+      isLoading,
+      user,
+      error
     }
   }
 })

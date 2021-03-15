@@ -32,7 +32,11 @@ const store = createStore<GlobalDataProps>({
   },
   getters: {
     getColumnById: (state) => (id: string) => {
-      return state.columns.find(c => c._id === id)
+      return state.columns.find(c => {
+        if (c && c._id) {
+          return c._id === id
+        }
+      })
     },
     getPostsByCid: (state) => (cid: string) => {
       return state.posts.filter(post => post.column === cid)
@@ -59,6 +63,9 @@ const store = createStore<GlobalDataProps>({
     },
     createPost (state, newPost) {
       state.posts.push(newPost)
+    },
+    deletePost (state, { data }) {
+      state.posts = state.posts.filter(post => post._id !== data._id)
     },
     fetchColumns (state, rawData) {
       state.columns = rawData.data.list
@@ -103,6 +110,9 @@ const store = createStore<GlobalDataProps>({
     },
     createPost ({ commit }, payload) {
       return asyncAndCommit('/posts', 'createPost', commit, { method: 'post', data: payload })
+    },
+    deletePost ({ commit }, id) {
+      return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
     },
     fetchPost ({ commit }, id) {
       return asyncAndCommit(`/posts/${id}`, 'fetchPost', commit)

@@ -33,6 +33,12 @@
               to='/create'
             >新建文章</router-link>
           </dropdown-item>
+          <dropdown-item>
+            <router-link
+              :to="`/column/${user.column}`"
+              class="dropdown-item"
+            >我的专栏</router-link>
+          </dropdown-item>
           <dropdown-item disabled>
             <a
               class="dropdown-item"

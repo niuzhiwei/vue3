@@ -33,28 +33,40 @@
         <button
           type="button"
           class="btn btn-danger"
+          @click.prevent="modalIsVisible = true"
         >删除</button>
       </div>
     </article>
+    <modal
+      title="删除文章"
+      :visible="modalIsVisible"
+      @modal-on-close="modalIsVisible = false"
+      @modal-on-confirm="hideAndDelete"
+    >
+      <p>确定是否删除此文章？</p>
+    </modal>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineComponent, onMounted, computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import MarkdownIt from 'markdown-it'
 import UserProfile from '../components/UserProfile.vue'
+import Modal from '../components/Modal.vue'
+import createMessage from '../components/createMessage'
 import { GlobalDataProps } from '../store'
-import { UserProps } from '../testData'
+import { UserProps, ResponseType, PostProps } from '../testData'
 export default defineComponent({
-  components: { UserProfile },
+  components: { UserProfile, Modal },
   setup () {
     const md = new MarkdownIt()
-    // const router = useRouter()
+    const router = useRouter()
     const route = useRoute()
     const store = useStore<GlobalDataProps>()
     const currentId = route.params.id
+    const modalIsVisible = ref(false)
     onMounted(() => {
       store.dispatch('fetchPost', currentId)
     })
@@ -83,11 +95,22 @@ export default defineComponent({
         return null
       }
     })
+    const hideAndDelete = () => {
+      modalIsVisible.value = false
+      store
+        .dispatch('deletePost', currentId)
+        .then((rawData: ResponseType<PostProps>) => {
+          createMessage('删除成功！2秒后跳转到专栏首页', 'success')
+          router.push(`/column/${rawData.data.column}`)
+        })
+    }
     return {
+      modalIsVisible,
       currentPost,
       currentHTML,
       showEditArea,
-      currentImageUrl
+      currentImageUrl,
+      hideAndDelete
     }
   }
 })

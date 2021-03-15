@@ -18,8 +18,8 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineComponent, computed, onMounted, watch } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
 import PostList from '../components/PostList.vue'
@@ -27,11 +27,19 @@ export default defineComponent({
   components: { PostList },
   setup () {
     const route = useRoute()
-    const currentId = route.params.id
+    let currentId = route.params.id
     const store = useStore<GlobalDataProps>()
-    onMounted(() => {
+    const getColumnAndPosts = () => {
       store.dispatch('fetchColumn', currentId)
       store.dispatch('fetchPosts', currentId)
+    }
+    onMounted(() => {
+      getColumnAndPosts()
+    })
+    onBeforeRouteUpdate((to, from, next) => {
+      currentId = to.params.id
+      getColumnAndPosts()
+      next()
     })
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsByCid(currentId))

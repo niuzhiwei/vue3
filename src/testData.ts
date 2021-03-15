@@ -1,5 +1,6 @@
-interface ImageProps {
+export interface ImageProps {
   url?: string;
+  fitUrl?: string;
   _id?: string;
   createdAt?: string;
 }
@@ -9,6 +10,8 @@ export interface UserProps {
   _id?: string;
   column?: string;
   email?: string;
+  avatar?: ImageProps;
+  description?: string;
 }
 export interface ColumnProps {
   _id: string;
@@ -18,11 +21,17 @@ export interface ColumnProps {
   createdAt: string;
 }
 export interface PostProps {
-  _id: string;
-  title: string;
+  _id?: string;
+  title?: string;
   excerpt?: string;
   content?: string;
-  image?: ImageProps;
-  createdAt: string;
+  image?: ImageProps | string;
+  createdAt?: string;
   column: string;
+  author?: string | UserProps;
+}
+export interface ResponseType<P = {}> {
+  code: number;
+  msg: string;
+  data: P;
 }

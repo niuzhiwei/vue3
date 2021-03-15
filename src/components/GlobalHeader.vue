@@ -43,6 +43,7 @@
             <a
               class="dropdown-item"
               href="#"
+              @click="logout"
             >退出登录</a>
           </dropdown-item>
         </dropdown>
@@ -53,6 +54,8 @@
 
 <script lang='ts'>
 import { defineComponent, PropType } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import Dropdown from './Dropdown.vue'
 import DropdownItem from './DropdownItem.vue'
 import { UserProps } from '../testData'
@@ -64,6 +67,17 @@ export default defineComponent({
     user: {
       type: Object as PropType<UserProps>,
       required: true
+    }
+  },
+  setup () {
+    const router = useRouter()
+    const store = useStore()
+    const logout = () => {
+      store.commit('logout')
+      router.push('/')
+    }
+    return {
+      logout
     }
   }
 })

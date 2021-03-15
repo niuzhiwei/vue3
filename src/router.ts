@@ -6,6 +6,7 @@ import Login from './views/Login.vue'
 import SignUp from './views/SignUp.vue'
 import ColumnDetail from './views/ColumnDetail.vue'
 import CreatePost from './views/CreatePost.vue'
+import PostDetail from './views/PostDetail.vue'
 
 const routerHistory = createWebHistory()
 const router = createRouter({
@@ -35,6 +36,11 @@ const router = createRouter({
       component: ColumnDetail
     },
     {
+      path: '/posts/:id',
+      name: 'posts',
+      component: PostDetail
+    },
+    {
       path: '/create',
       name: 'create',
       component: CreatePost,
@@ -59,7 +65,7 @@ router.beforeEach((to, from, next) => {
           next()
         }
       }).catch(() => {
-        localStorage.removeItem('token')
+        store.commit('logout')
         next('login')
       })
     } else {

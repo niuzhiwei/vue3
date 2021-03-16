@@ -18,7 +18,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed, onMounted, watch } from 'vue'
+import { defineComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
@@ -27,22 +27,22 @@ export default defineComponent({
   components: { PostList },
   setup () {
     const route = useRoute()
-    let currentId = route.params.id
+    const currentId = ref(route.params.id)
     const store = useStore<GlobalDataProps>()
     const getColumnAndPosts = () => {
-      store.dispatch('fetchColumn', currentId)
-      store.dispatch('fetchPosts', currentId)
+      store.dispatch('fetchColumn', currentId.value)
+      store.dispatch('fetchPosts', currentId.value)
     }
     onMounted(() => {
       getColumnAndPosts()
     })
     onBeforeRouteUpdate((to, from, next) => {
-      currentId = to.params.id
+      currentId.value = to.params.id
       getColumnAndPosts()
       next()
     })
-    const column = computed(() => store.getters.getColumnById(currentId))
-    const list = computed(() => store.getters.getPostsByCid(currentId))
+    const column = computed(() => store.getters.getColumnById(currentId.value))
+    const list = computed(() => store.getters.getPostsByCid(currentId.value))
     return {
       column,
       list

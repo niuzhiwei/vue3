@@ -35,3 +35,7 @@ export interface ResponseType<P = {}> {
   msg: string;
   data: P;
 }
+
+export interface ListProps<T> {
+  [id: string]: T;
+}

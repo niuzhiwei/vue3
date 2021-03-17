@@ -4,13 +4,16 @@ import { ref, computed, ComputedRef } from 'vue'
 interface LoadParams {
     currentPage: number;
     pageSize: number;
+    columnId?: string;
 }
 const useLoadMore = (actionName: string, total: ComputedRef<number>, params: LoadParams = { pageSize: 6, currentPage: 2 }) => {
   const store = useStore()
-  const currentPage = ref(params.currentPage)
+  const { pageSize, currentPage: current, columnId } = params
+  const currentPage = ref(current)
   const requestParams = computed(() => ({
     currentPage: currentPage.value,
-    pageSize: params.pageSize
+    pageSize,
+    columnId
   }))
   const loadMorePage = () => {
     store.dispatch(actionName, requestParams.value).then(() => {

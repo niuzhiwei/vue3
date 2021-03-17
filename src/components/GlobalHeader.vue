@@ -15,10 +15,10 @@
         >登录</router-link>
       </li>
       <li class="list-inline-item">
-        <a
-          href="#"
+        <router-link
+          to="/signup"
           class="btn btn-outline-light my-2"
-        >注册</a>
+        >注册</router-link>
       </li>
     </ul>
     <ul

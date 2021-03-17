@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 
-// axios.defaults.baseURL = 'http://apis.imooc.com/api/'
+axios.defaults.baseURL = 'http://apis.imooc.com/api/'
 axios.defaults.baseURL = '/api'
 axios.interceptors.request.use(config => {
   config.params = { ...config.params, icode: 'A0AEFEEC4B540896' }

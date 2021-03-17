@@ -39,11 +39,11 @@
               class="dropdown-item"
             >我的专栏</router-link>
           </dropdown-item>
-          <dropdown-item disabled>
-            <a
+          <dropdown-item>
+            <router-link
               class="dropdown-item"
-              href="#"
-            >编辑资料</a>
+              to="/update"
+            >编辑资料</router-link>
           </dropdown-item>
           <dropdown-item>
             <a

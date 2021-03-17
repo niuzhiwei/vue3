@@ -10,7 +10,7 @@ export function generateFitUrl (data: ImageProps, width: number, height: number,
 
 export function addColumnAvatar (data: ColumnProps | UserProps, width: number, height: number) {
   if (data.avatar) {
-    generateFitUrl(data.avatar, width, height)
+    generateFitUrl(data.avatar as ImageProps, width, height)
   } else {
     const parseCol = data as ColumnProps
     data.avatar = {
@@ -47,15 +47,15 @@ export function beforeUploadCheck (file: File, condition: CheckCondition): Error
   }
 }
 
-interface TestProps {
-  _id: string;
-  name: string;
-}
-const testData: TestProps[] = [{ _id: '1', name: 'a' }, { _id: '2', name: 'b' }]
-const testData2: { [key: string]: TestProps } = {
-  1: { _id: '1', name: 'a' },
-  2: { _id: '2', name: 'b' }
-}
+// interface TestProps {
+//   _id: string;
+//   name: string;
+// }
+// const testData: TestProps[] = [{ _id: '1', name: 'a' }, { _id: '2', name: 'b' }]
+// const testData2: { [key: string]: TestProps } = {
+//   1: { _id: '1', name: 'a' },
+//   2: { _id: '2', name: 'b' }
+// }
 export const arrayToObj = <T extends { _id?: string }>(arr: Array<T>) => {
   return arr.reduce((prev, current) => {
     if (current._id) {

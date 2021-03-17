@@ -77,6 +77,9 @@ const store = createStore<GlobalDataProps>({
       localStorage.setItem('token', token)
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
+    updateUser (state, rawData) {
+      state.user = { ...rawData.data, isLogin: true }
+    },
     logout (state) {
       state.token = ''
       state.user = { isLogin: false }
@@ -99,6 +102,9 @@ const store = createStore<GlobalDataProps>({
       }
     },
     fetchColumn (state, rawData) {
+      state.columns.data[rawData.data._id] = rawData.data
+    },
+    updateColonm (state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data
     },
     fetchPosts (state, { data: rawData, extraData: columnId }) {
@@ -133,7 +139,15 @@ const store = createStore<GlobalDataProps>({
     fetchColumn ({ state, commit }, cid) {
       if (!state.columns.data[cid]) {
         return asyncAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
+      } else {
+        return Promise.resolve({ data: state.columns.data[cid] })
       }
+    },
+    updateColonm ({ commit }, { id, payload }) {
+      return asyncAndCommit(`/columns/${id}`, 'updateColonm', commit, {
+        method: 'patch',
+        data: payload
+      })
     },
     fetchPosts ({ state, commit }, params = {}) {
       const { currentPage = 1, pageSize = 6, columnId } = params
@@ -172,6 +186,12 @@ const store = createStore<GlobalDataProps>({
     },
     fetchCurrentUser ({ commit }) {
       return asyncAndCommit('/user/current', 'fetchCurrentUser', commit)
+    },
+    updateUser ({ commit }, { id, payload }) {
+      return asyncAndCommit(`/user/${id}`, 'updateUser', commit, {
+        method: 'patch',
+        data: payload
+      })
     },
     loginAndFetch ({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => {

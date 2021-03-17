@@ -4,6 +4,7 @@ import axios from 'axios'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import SignUp from './views/SignUp.vue'
+import EditProfile from './views/EditProfile.vue'
 import ColumnDetail from './views/ColumnDetail.vue'
 import CreatePost from './views/CreatePost.vue'
 import PostDetail from './views/PostDetail.vue'
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignUp
+    },
+    {
+      path: '/update',
+      name: 'update',
+      component: EditProfile
     },
     {
       path: '/column/:id',

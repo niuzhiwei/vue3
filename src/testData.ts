@@ -5,20 +5,20 @@ export interface ImageProps {
   createdAt?: string;
 }
 export interface UserProps {
-  isLogin: boolean;
+  isLogin?: boolean;
   nickName?: string;
   _id?: string;
   column?: string;
   email?: string;
-  avatar?: ImageProps;
+  avatar?: ImageProps | string;
   description?: string;
 }
 export interface ColumnProps {
-  _id: string;
+  _id?: string;
   title: string;
   description: string;
-  avatar?: ImageProps;
-  createdAt: string;
+  avatar?: ImageProps | string;
+  createdAt?: string;
 }
 export interface PostProps {
   _id?: string;

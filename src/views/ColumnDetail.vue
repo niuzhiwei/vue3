@@ -25,14 +25,7 @@
 </template>
 
 <script lang='ts'>
-import {
-  defineComponent,
-  computed,
-  onMounted,
-  ref,
-  reactive,
-  watch
-} from 'vue'
+import { defineComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
